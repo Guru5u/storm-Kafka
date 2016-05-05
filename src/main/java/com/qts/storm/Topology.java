@@ -1,16 +1,14 @@
-package com.vishnu.storm;
+package com.qts.storm;
 
 import java.util.Properties;
 
-import org.apache.storm.hdfs.bolt.HdfsBolt;
-
-import com.vishnu.storm.bolt.BoltBuilder;
-import com.vishnu.storm.bolt.MongodbBolt;
-import com.vishnu.storm.bolt.SinkTypeBolt;
-import com.vishnu.storm.bolt.SolrBolt;
-import com.vishnu.storm.spout.SpoutBuilder;
+import com.qts.storm.bolt.BoltBuilder;
+import com.qts.storm.bolt.MongodbBolt;
+import com.qts.storm.bolt.SinkTypeBolt;
+import com.qts.storm.spout.SpoutBuilder;
 
 import backtype.storm.Config;
+import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
 import backtype.storm.topology.TopologyBuilder;
 import storm.kafka.KafkaSpout;
@@ -25,8 +23,8 @@ public class Topology {
 	public Properties configs;
 	public BoltBuilder boltBuilder;
 	public SpoutBuilder spoutBuilder;
-	public static final String SOLR_STREAM = "solr-stream";
-	public static final String HDFS_STREAM = "hdfs-stream";
+	/*public static final String SOLR_STREAM = "solr-stream";
+	public static final String HDFS_STREAM = "hdfs-stream";*/
 	public static final String MONGODB_STREAM = "mongodb-stream";
 	
 
@@ -46,7 +44,7 @@ public class Topology {
 		TopologyBuilder builder = new TopologyBuilder();	
 		KafkaSpout kafkaSpout = spoutBuilder.buildKafkaSpout();
 		SinkTypeBolt sinkTypeBolt = boltBuilder.buildSinkTypeBolt();
-		SolrBolt solrBolt = boltBuilder.buildSolrBolt();
+		//SolrBolt solrBolt = boltBuilder.buildSolrBolt();
 		//HdfsBolt hdfsBolt = boltBuilder.buildHdfsBolt();
 		MongodbBolt mongoBolt = boltBuilder.buildMongodbBolt();
 		
@@ -79,11 +77,14 @@ public class Topology {
 		conf.setMessageTimeoutSecs(120);
 		
 		//conf.put("solr.zookeeper.hosts",configs.getProperty(Keys.SOLR_ZOOKEEPER_HOSTS));
-		//conf.put("zookeeper.hosts",configs.getProperty(Keys.KAFKA_ZOOKEEPER));
+		conf.put("zookeeper.hosts",configs.getProperty(Keys.KAFKA_ZOOKEEPER));
 		String topologyName = configs.getProperty(Keys.TOPOLOGY_NAME);
 		//Defines how many worker processes have to be created for the topology in the cluster.
-		//conf.setNumWorkers(1);
-		StormSubmitter.submitTopology(topologyName, conf, builder.createTopology());
+		conf.setNumWorkers(1);
+		
+		LocalCluster cluster = new LocalCluster();
+		cluster.submitTopology(topologyName, conf, builder.createTopology()); // use this to run from eclipse
+		//StormSubmitter.submitTopology(topologyName, conf, builder.createTopology()); // use this for jar file deployment
 	}
 
 	public static void main(String[] args) throws Exception {

@@ -1,19 +1,8 @@
-package com.vishnu.storm.bolt;
+package com.qts.storm.bolt;
 
 import java.util.Properties;
 
-import org.apache.storm.hdfs.bolt.HdfsBolt;
-import org.apache.storm.hdfs.bolt.format.DefaultFileNameFormat;
-import org.apache.storm.hdfs.bolt.format.DelimitedRecordFormat;
-import org.apache.storm.hdfs.bolt.format.FileNameFormat;
-import org.apache.storm.hdfs.bolt.format.RecordFormat;
-import org.apache.storm.hdfs.bolt.rotation.FileRotationPolicy;
-import org.apache.storm.hdfs.bolt.rotation.FileSizeRotationPolicy;
-import org.apache.storm.hdfs.bolt.rotation.FileSizeRotationPolicy.Units;
-import org.apache.storm.hdfs.bolt.sync.CountSyncPolicy;
-import org.apache.storm.hdfs.bolt.sync.SyncPolicy;
-
-import com.vishnu.storm.Keys;
+import com.qts.storm.Keys;
 
 /**
  * @author vishnu viswanath
@@ -36,10 +25,13 @@ public class BoltBuilder {
 		int port = Integer.parseInt(configs.getProperty(Keys.MONGO_PORT));
 		String db = configs.getProperty(Keys.MONGO_DATABASE);
 		String collection = configs.getProperty(Keys.MONGO_COLLECTION);
+		
+		System.out.println("=====================>>>>> "  + host +" ," + port +", "+db +", "+ collection);
+		
 		return new MongodbBolt(host, port, db, collection);
 	}
 	
-	public  SolrBolt buildSolrBolt() {
+	/*public  SolrBolt buildSolrBolt() {
 		String solrServerUlr = configs.getProperty(Keys.SOLR_SERVER);
 		String collection = configs.getProperty(Keys.SOLR_COLLECTION);
 		SolrBolt solrBolt = new SolrBolt(solrServerUlr+collection);
@@ -60,6 +52,6 @@ public class BoltBuilder {
         .withRotationPolicy(rotationPolicy)
         .withSyncPolicy(syncPolicy);
 		return bolt;
-	}
+	}*/
 
 }

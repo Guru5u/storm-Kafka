@@ -1,8 +1,8 @@
-package com.vishnu.storm.bolt;
+package com.qts.storm.bolt;
 
 import java.util.Map;
 
-import com.vishnu.storm.Topology;
+import com.qts.storm.Topology;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -33,13 +33,16 @@ public class SinkTypeBolt extends BaseRichBolt {
 		String type = value.substring(0,index);
 		System.out.println("Type : "+type);
 		value = value.substring(index);
-		if(type.equals("solr")) {
+		/*if(type.equals("solr")) {
 			collector.emit(Topology.SOLR_STREAM,new Values(type,value));
 			System.out.println("Emitted : "+value);
 		} else if (type.equals("hdfs")) {
 			collector.emit(Topology.HDFS_STREAM,new Values(type,value));
 			System.out.println("Emitted : "+value);
-		} else if (type.equals("mongo")) {
+		} else*/
+			
+			
+			if (type.equals("mongo")) {
 			collector.emit(Topology.MONGODB_STREAM,new Values(type,value));
 			System.out.println("Emitted : "+value);
 		}
@@ -53,8 +56,8 @@ public class SinkTypeBolt extends BaseRichBolt {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declareStream(Topology.SOLR_STREAM, new Fields( "sinkType","content" ));
-		declarer.declareStream(Topology.HDFS_STREAM, new Fields( "sinkType","content" ));
+		//declarer.declareStream(Topology.SOLR_STREAM, new Fields( "sinkType","content" ));
+		//declarer.declareStream(Topology.HDFS_STREAM, new Fields( "sinkType","content" ));
 		declarer.declareStream(Topology.MONGODB_STREAM, new Fields( "sinkType","content" ));
 	}
 

@@ -1,4 +1,4 @@
-package com.vishnu.storm;
+package com.qts.storm;
 
 /**
  * @author vishnu viswanath

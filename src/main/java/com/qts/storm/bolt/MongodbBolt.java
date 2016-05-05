@@ -1,4 +1,4 @@
-package com.vishnu.storm.bolt;
+package com.qts.storm.bolt;
 
 import java.util.Map;
 
